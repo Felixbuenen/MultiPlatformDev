@@ -5,9 +5,11 @@ using UnityEngine;
 public class PlayerStateManager : MonoBehaviour
 {
   public static PlayerStateManager instance = null;
-  private PlayerState currentState;
 
   private PlayerState[] states;
+  private PlayerState currentState;
+
+  private PlayerStats playerStats;
 
   void Awake()
   {
@@ -25,9 +27,11 @@ public class PlayerStateManager : MonoBehaviour
 
   void Start()
   {
+    playerStats = GetComponent<PlayerStats>();
+
     states = new PlayerState[]{
-      new PlayerRidingState(),
-      new PlayerCrouchState()
+      new PlayerRidingState(playerStats),
+      new PlayerCrouchState(playerStats)
     };
 
     // set initial state
@@ -39,7 +43,17 @@ public class PlayerStateManager : MonoBehaviour
   void Update()
   {
     currentState.HandleInput();
-    currentState.Update();
+    currentState.Update(Time.deltaTime);
+  }
+
+  void OnCollisionEnter(Collision c)
+  {
+    currentState.OnCollisionEnter(c);
+  }
+
+  void OnCollisionExit()
+  {
+    currentState.OnCollisionExit();
   }
 
   public void SwitchState(int stateID)

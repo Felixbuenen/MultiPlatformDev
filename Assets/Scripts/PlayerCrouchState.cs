@@ -13,7 +13,7 @@ public class PlayerCrouchState : PlayerState
     set { m_crouchvalue = value; }
   }
 
-  public PlayerCrouchState()
+  public PlayerCrouchState(PlayerStats playerStats) : base(playerStats)
   {
     ID = GetNewID();
   }
@@ -21,6 +21,7 @@ public class PlayerCrouchState : PlayerState
   public override void Start()
   {
     Debug.Log("Player crouch state started");
+    //playerStats.Velocity = Vector3.zero;
   }
 
   public override void Stop()
@@ -52,11 +53,10 @@ public class PlayerCrouchState : PlayerState
     }
   }
 
-  public override void Update()
+  public override void Update(float dt)
   {
     // do state logic
+    playerStats.Position += playerStats.Velocity * playerStats.Speed * dt;
   }
-
-
 
 }

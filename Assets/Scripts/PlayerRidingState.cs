@@ -7,7 +7,7 @@ public class PlayerRidingState : PlayerState
 
   public static int ID;
 
-  public PlayerRidingState()
+  public PlayerRidingState(PlayerStats playerStats) : base(playerStats)
   {
     ID = GetNewID();
   }
@@ -15,11 +15,13 @@ public class PlayerRidingState : PlayerState
   public override void Start()
   {
     Debug.Log("Player riding state started.");
+    playerStats.Velocity = Vector3.up;
   }
 
   public override void Stop()
   {
     Debug.Log("Player riding state stopped");
+    playerStats.Velocity = Vector3.zero;
   }
 
   public override void HandleInput()
@@ -32,9 +34,9 @@ public class PlayerRidingState : PlayerState
     // check ground trick input
   }
 
-  public override void Update()
+  public override void Update(float dt)
   {
     // update player position
-
+    playerStats.Position += playerStats.Velocity * playerStats.Speed * dt;
   }
 }
