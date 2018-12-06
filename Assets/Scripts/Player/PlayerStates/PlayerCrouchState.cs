@@ -13,7 +13,7 @@ public class PlayerCrouchState : PlayerState
     set { m_crouchvalue = value; }
   }
 
-  public PlayerCrouchState(PlayerStats playerStats) : base(playerStats)
+  public PlayerCrouchState() : base()
   {
     ID = GetNewID();
   }
@@ -21,7 +21,7 @@ public class PlayerCrouchState : PlayerState
   public override void Start()
   {
     Debug.Log("Player crouch state started");
-    //playerStats.Velocity = Vector3.zero;
+    playerStats.Velocity = Vector3.zero;
   }
 
   public override void Stop()
@@ -30,16 +30,16 @@ public class PlayerCrouchState : PlayerState
     m_crouchvalue = 0.0f;
   }
 
-  public override void HandleInput()
+  public override void HandleInput(PlayerController playerController)
   {
-    if (Input.GetAxisRaw("PS4_RightStickY") == 0)
+    if (playerController.GetRawTrickControl().y == 0)
     {
-      PlayerStateManager.instance.SwitchState(PlayerRidingState.ID);
+      stateManager.SwitchState(PlayerRidingState.ID);
       return; // switch state to rolling
     }
 
     // player fully crouched, increase jump force
-    if (Input.GetAxis("PS4_RightStickY") == 1.0f)
+    if (playerController.GetRawTrickControl().y == 1.0f)
     {
       // increase jump force
       Debug.Log("Increasing jump...");
@@ -47,16 +47,16 @@ public class PlayerCrouchState : PlayerState
 
     else
     {
-      m_crouchvalue = Input.GetAxis("PS4_RightStickY");
+      m_crouchvalue = playerController.GetRawTrickControl().y;
       //Debug.Log("Jump force is: " + m_crouchvalue);
       Debug.Log("Non-optimal crouch");
     }
   }
 
-  public override void Update(float dt)
+  public override void Update()
   {
     // do state logic
-    playerStats.Position += playerStats.Velocity * playerStats.Speed * dt;
+    playerStats.Position += playerStats.Velocity * playerStats.Speed * Time.deltaTime;
   }
 
 }

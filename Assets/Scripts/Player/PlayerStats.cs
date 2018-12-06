@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
+  Transform player;
+
   void Start()
   {
+    player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     Velocity = Vector3.zero;
-    Speed = 10.0f;
+    Speed = 15.0f;
   }
 
   public Vector3 Velocity
@@ -17,11 +20,17 @@ public class PlayerStats : MonoBehaviour
   }
   public Vector3 Position
   {
-    get { return transform.position; }
-    set { transform.position = value; }
+    get { return player.position; }
+    set { player.position = value; }
   }
 
   public float Speed
+  {
+    get;
+    set;
+  }
+
+  public bool DoingTrick
   {
     get;
     set;
