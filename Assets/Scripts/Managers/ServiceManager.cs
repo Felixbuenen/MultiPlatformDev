@@ -24,7 +24,14 @@ public class ServiceManager : IServiceManager
   {
     serviceDict.Add(typeof(PlayerStateManager), GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStateManager>());
 
-    serviceDict.Add(typeof(IInputSystem), new PS4InputSystem());
+    // platform dependent input
+#if UNITY_EDITOR || UNITY_STANDALONE
+    serviceDict.Add(typeof(IInputSystem), new PS4InputSystem()); // make this platform independent
+#elif UNITY_ANDROID
+    serviceDict.Add(typeof(IInputSystem), new MobileInputSystem());
+
+#endif
+
   }
 
   public bool RequestService<T>(out T service) where T : class

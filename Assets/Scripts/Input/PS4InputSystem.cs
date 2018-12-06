@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PS4InputSystem : IInputSystem
 {
-
+  Transform player;
   Queue<int> parsedInput;
   public Queue<int> GetSerializedTrickInput()
   {
@@ -27,6 +27,7 @@ public class PS4InputSystem : IInputSystem
 
     // update input buffer
     parsedInput.Enqueue(newInputValue);
+    //parsedInput.Enqueue(0);
     parsedInput.Dequeue();
 
     // USED FOR DEBUGGING

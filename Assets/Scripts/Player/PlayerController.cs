@@ -12,7 +12,7 @@ public class PlayerController
     trickAnalyzer = new TrickAnalyzer();
     if (!ServiceManager.Singleton.RequestService<IInputSystem>(out inputSystem))
     {
-      Debug.Log("------- PlayerController COULD NOT GET PS4InputSystem -------");
+      Debug.Log("------- PlayerController COULD NOT GET InputSystem -------");
     }
   }
 
