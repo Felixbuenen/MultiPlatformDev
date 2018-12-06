@@ -5,12 +5,12 @@ using UnityEngine;
 public class PlayerController
 {
   TrickAnalyzer trickAnalyzer;
-  PS4InputSystem inputSystem;
+  IInputSystem inputSystem;
 
   public PlayerController()
   {
     trickAnalyzer = new TrickAnalyzer();
-    if (!ServiceManager.Singleton.RequestService<PS4InputSystem>(out inputSystem))
+    if (!ServiceManager.Singleton.RequestService<IInputSystem>(out inputSystem))
     {
       Debug.Log("------- PlayerController COULD NOT GET PS4InputSystem -------");
     }
@@ -23,14 +23,13 @@ public class PlayerController
 
   public List<Trick> GetTricks()
   {
-    List<Trick> tricks = trickAnalyzer.GetTricks(inputSystem.ParsedInput);
+    List<Trick> tricks = trickAnalyzer.GetTricks(inputSystem.GetSerializedTrickInput());
     return tricks;
   }
 
   public Vector2 GetMovement()
   {
-    Debug.Log("GetMovement() NOT YET IMPLEMENTED");
-    return Vector2.zero;
+    return inputSystem.AnalogMoveInput();
   }
 
   public Vector2 GetRawTrickControl()

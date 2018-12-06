@@ -19,7 +19,7 @@ public class PlayerRidingState : PlayerState
 
   public override void Stop()
   {
-    Debug.Log("Player riding state stopped");
+    //Debug.Log("Player riding state stopped");
     //playerStats.Velocity = Vector3.zero;
   }
 
@@ -38,6 +38,8 @@ public class PlayerRidingState : PlayerState
     {
       stateManager.SwitchState(PlayerCrouchState.ID);
     }
+
+    playerStats.Velocity = new Vector3(playerController.GetMovement().x * playerStats.Speed, playerStats.Velocity.y, playerStats.Velocity.z);
 
     List<Trick> tricks = playerController.GetTricks();
     if (tricks.Count != 0)

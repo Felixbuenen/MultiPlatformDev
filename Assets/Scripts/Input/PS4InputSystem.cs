@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PS4InputSystem
+public class PS4InputSystem : IInputSystem
 {
 
   Queue<int> parsedInput;
-  public Queue<int> ParsedInput
+  public Queue<int> GetSerializedTrickInput()
   {
-    get { return parsedInput; }
+    return parsedInput;
   }
 
   // Use this for initialization
@@ -37,6 +37,14 @@ public class PS4InputSystem
   }
 
   // returns raw trick-input
+  public Vector2 AnalogMoveInput()
+  {
+    float x = Input.GetAxis("PS4_LeftStickX");
+    float y = Input.GetAxis("PS4_LeftStickY");
+
+    return new Vector2(x, y);
+  }
+
   public Vector2 AnalogTrickInput()
   {
     float x = Input.GetAxis("PS4_RightStickX");

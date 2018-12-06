@@ -23,7 +23,8 @@ public class ServiceManager : IServiceManager
   private static void InitializeCoreServices()
   {
     serviceDict.Add(typeof(PlayerStateManager), GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStateManager>());
-    serviceDict.Add(typeof(PS4InputSystem), new PS4InputSystem());
+
+    serviceDict.Add(typeof(IInputSystem), new PS4InputSystem());
   }
 
   public bool RequestService<T>(out T service) where T : class
