@@ -7,9 +7,11 @@ public class PlayerFallingState : PlayerState
   private TrickExecuter monoBehaviour;
   public static int ID;
 
-  public PlayerFallingState() : base()
+  public PlayerFallingState(int id) : base()
   {
-    ID = GetNewID();
+    //ID = GetNewID();
+    ID = id;
+
     monoBehaviour = GameObject.Find("_TrickExecuter").GetComponent<TrickExecuter>();
   }
 

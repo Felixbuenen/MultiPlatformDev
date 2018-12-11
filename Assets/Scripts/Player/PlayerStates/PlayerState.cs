@@ -2,11 +2,11 @@
 
 public abstract class PlayerState
 {
-  private static int currentID = 0;
-  protected static int GetNewID()
-  {
-    return currentID++;
-  }
+  //private static int currentID = 0;
+  //protected static int GetNewID()
+  //{
+  //  return currentID++;
+  //}
   protected static PlayerStats playerStats;
   protected static PlayerStateManager stateManager;
   public static void SetPlayerStats(PlayerStats ps)

@@ -10,7 +10,8 @@ public class PlayerStats : MonoBehaviour
   {
     player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     Velocity = Vector3.zero;
-    Speed = 15.0f;
+    Speed = 130.0f;
+    SteerSpeed = 230.0f;
   }
 
   public Vector3 Velocity
@@ -25,6 +26,12 @@ public class PlayerStats : MonoBehaviour
   }
 
   public float Speed
+  {
+    get;
+    set;
+  }
+
+  public float SteerSpeed
   {
     get;
     set;

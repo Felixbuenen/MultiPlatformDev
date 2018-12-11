@@ -5,18 +5,22 @@ using UnityEngine;
 
 public class PS4InputSystem : IInputSystem
 {
+  TrickQueue trickQueue;
   Transform player;
-  Queue<int> parsedInput;
-  public Queue<int> GetSerializedTrickInput()
+  //Queue<int> parsedInput;
+  public TrickQueue GetSerializedTrickInput()
   {
-    return parsedInput;
+    //return parsedInput;
+    return trickQueue;
   }
 
   // Use this for initialization
   public PS4InputSystem()
   {
-    parsedInput = new Queue<int>();
-    for (int i = 0; i < 90; i++) parsedInput.Enqueue(0); // fill queue with 0
+    //parsedInput = new Queue<int>();
+    //for (int i = 0; i < 90; i++) parsedInput.Enqueue(0); // fill queue with 0
+
+    trickQueue = new TrickQueue(90);
   }
 
   // Update is called once per frame
@@ -26,10 +30,12 @@ public class PS4InputSystem : IInputSystem
     int newInputValue = ParseTrickInput(AnalogTrickInput());
 
     // update input buffer
-    parsedInput.Enqueue(newInputValue);
+    // parsedInput.Enqueue(newInputValue);
     //parsedInput.Enqueue(0);
-    parsedInput.Dequeue();
+    //parsedInput.Dequeue();
 
+    trickQueue.EnqueueDequeue(newInputValue);
+    //trickQueue.DebugToConsole();
     // USED FOR DEBUGGING
     /*string buffer = "";
     foreach (int i in parsedInput) buffer += i;

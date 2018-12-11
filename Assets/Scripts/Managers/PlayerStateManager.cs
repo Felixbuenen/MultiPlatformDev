@@ -10,7 +10,7 @@ public class PlayerStateManager : MonoBehaviour
 
   private PlayerStats playerStats;
 
-  private void Awake()
+  private void Start()
   {
     // setup player state object
     playerStats = GetComponent<PlayerStats>();
@@ -18,17 +18,20 @@ public class PlayerStateManager : MonoBehaviour
     PlayerState.SetPlayerStateManager(this);
 
     states = new PlayerState[]{
-      new PlayerRidingState(),
-      new PlayerCrouchState(),
-      new PlayerAirState(),
-      new PlayerFallingState()
+      new PlayerRidingState(0),
+      new PlayerCrouchState(1),
+      new PlayerAirState(2),
+      new PlayerFallingState(3)
     };
+    Debug.Log("Initialize PlayerStateManager, riding ID: " + PlayerRidingState.ID);
 
     playerController = new PlayerController();
 
     // set initial state
     currentState = states[PlayerRidingState.ID];
     currentState.Start();
+
+
   }
 
   public void FixedUpdate()

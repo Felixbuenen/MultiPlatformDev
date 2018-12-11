@@ -21,7 +21,7 @@ public class TrickAnalyzer
     trickBuffer = new List<Trick>();
   }
 
-  public List<Trick> GetTricks(Queue<int> parsedInput)
+  public List<Trick> GetTricks(TrickQueue parsedInput)
   {
     // maybe change this to a regex expression that takes a list of things it can match (trick patterns)
     //  and hopefully it will return tricks in the right order
@@ -35,7 +35,7 @@ public class TrickAnalyzer
     }*/
 
     // -------- DEBUG -----------
-    if (parsedInput.Contains(3))
+    /*if (parsedInput.Contains(3))
     {
       if (trickPool[typeof(Kickflip)].Available)
       {
@@ -43,8 +43,33 @@ public class TrickAnalyzer
         trickBuffer.Add(trickPool[typeof(Kickflip)]);
         //Debug.Log(trickBuffer.Count);
       }
-    }
+    }*/
     // -------- END DEBUG -----------
+
+    bool debugFoundTrick = false;
+
+    foreach (Trick trick in trickPool.Values)
+    {
+      string recordedTrick = parsedInput.FindTrick(trick);
+      if (recordedTrick != "")
+      {
+        debugFoundTrick = true;
+        Debug.Log(trick + " recorded. Pattern: " + recordedTrick);
+        if (trick.Available)
+        {
+          Debug.Log("Adding " + trick + " to buffer...");
+          trickBuffer.Add(trick);
+          break;
+        }
+      }
+    }
+
+    if (!debugFoundTrick)
+    {
+      Debug.Log("No trick found: ");
+      parsedInput.DebugToConsole();
+    }
+
 
     return trickBuffer;
   }

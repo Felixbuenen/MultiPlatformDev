@@ -5,7 +5,7 @@ using UnityEngine;
 
 public interface IInputSystem
 {
-  Queue<int> GetSerializedTrickInput(); // serialized trick input
+  TrickQueue GetSerializedTrickInput(); // serialized trick input
 
   void Update();
 

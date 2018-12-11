@@ -7,9 +7,11 @@ public class PlayerAirState : PlayerState
   private bool doingTrick;
 
   public static int ID;
-  public PlayerAirState() : base()
+  public PlayerAirState(int id) : base()
   {
-    ID = GetNewID();
+    //ID = GetNewID();
+    ID = id;
+
   }
 
   public override void Start()

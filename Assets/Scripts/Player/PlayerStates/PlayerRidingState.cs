@@ -6,15 +6,16 @@ public class PlayerRidingState : PlayerState
 {
   public static int ID;
 
-  public PlayerRidingState() : base()
+  public PlayerRidingState(int id) : base()
   {
-    ID = GetNewID();
+    //ID = GetNewID();
+    ID = id;
   }
 
   public override void Start()
   {
     Debug.Log("Player riding state started.");
-    playerStats.Velocity = Vector3.forward * playerStats.Speed;
+    playerStats.Velocity = Vector3.forward;
   }
 
   public override void Stop()
@@ -39,8 +40,6 @@ public class PlayerRidingState : PlayerState
       stateManager.SwitchState(PlayerCrouchState.ID);
     }
 
-    playerStats.Velocity = new Vector3(playerController.GetMovement().x * playerStats.Speed, playerStats.Velocity.y, playerStats.Velocity.z);
-
     List<Trick> tricks = playerController.GetTricks();
     if (tricks.Count != 0)
     {
@@ -52,6 +51,9 @@ public class PlayerRidingState : PlayerState
       Debug.Log(latestTrick);
       latestTrick.DoExecute(stateManager.gameObject);
     }
+
+    playerStats.Velocity = new Vector3(playerController.GetMovement().x, playerStats.Velocity.y, 1);
+
 
     //Debug.Log("Number of tricks in queue: " + playerController.GetTricks().Count);
     // check left - right movement
@@ -67,6 +69,10 @@ public class PlayerRidingState : PlayerState
   {
     // update player position
     //playerStats.Position += playerStats.Velocity * playerStats.Speed * Time.deltaTime;
-    playerStats.GetComponent<Rigidbody>().velocity = playerStats.Velocity * playerStats.Speed * Time.deltaTime;
+    float steerVal = playerStats.Velocity.x * playerStats.SteerSpeed;
+    float forwardVal = playerStats.Velocity.z * playerStats.Speed;
+    Vector3 vel = new Vector3(steerVal, playerStats.Velocity.y, forwardVal);
+
+    playerStats.GetComponent<Rigidbody>().velocity = vel * Time.deltaTime;
   }
 }

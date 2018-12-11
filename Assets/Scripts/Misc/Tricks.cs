@@ -35,7 +35,7 @@ public class Ollie : Trick
 
   public override string Pattern
   {
-    get { return "51"; }
+    get { return "501"; }
   }
 
   public Ollie() : base()
@@ -50,18 +50,19 @@ public class Ollie : Trick
 
   public override void DoExecute(GameObject player)
   {
-    Available = false;
-
-    player.GetComponent<Rigidbody>().AddForce(new Vector3(0, 10, 0), ForceMode.Impulse);
-    //TrickExecuter.StartCoroutine(Execute());
+    player.GetComponent<Rigidbody>().AddForce(new Vector3(0, 5, 0), ForceMode.Impulse);
+    player.GetComponent<PlayerStateManager>().SwitchState(PlayerAirState.ID);
+    TrickExecuter.StartCoroutine(Execute(player));
   }
 
   protected override IEnumerator Execute(GameObject player)
   {
     // do ollie
     Available = false;
+    player.GetComponent<PlayerStats>().DoingTrick = true;
     Debug.Log("Doing ollie....");
-    yield return new WaitForSeconds(3f);
+    yield return new WaitForSeconds(.25f);
+    player.GetComponent<PlayerStats>().DoingTrick = false;
     Debug.Log("Ollie succesful!");
     yield return new WaitForSeconds(1f); // wait to reset availability
     Available = true;
@@ -76,7 +77,7 @@ public class Kickflip : Trick
 
   public override string Pattern
   {
-    get { return "52"; }
+    get { return "502"; }
   }
 
   public Kickflip() : base()

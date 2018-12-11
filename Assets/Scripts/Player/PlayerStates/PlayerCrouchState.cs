@@ -13,15 +13,17 @@ public class PlayerCrouchState : PlayerState
     set { m_crouchvalue = value; }
   }
 
-  public PlayerCrouchState() : base()
+  public PlayerCrouchState(int id) : base()
   {
-    ID = GetNewID();
+    //ID = GetNewID();
+    ID = id;
+
   }
 
   public override void Start()
   {
     Debug.Log("Player crouch state started");
-    playerStats.Velocity = Vector3.zero;
+    //playerStats.Velocity = Vector3.zero;
   }
 
   public override void Stop()
@@ -48,15 +50,20 @@ public class PlayerCrouchState : PlayerState
     else
     {
       m_crouchvalue = playerController.GetRawTrickControl().y;
-      //Debug.Log("Jump force is: " + m_crouchvalue);
-      Debug.Log("Non-optimal crouch");
     }
+
+    playerStats.Velocity = new Vector3(playerController.GetMovement().x, playerStats.Velocity.y, 1);
+
   }
 
   public override void Update()
   {
     // do state logic
-    playerStats.Position += playerStats.Velocity * playerStats.Speed * Time.deltaTime;
+    float steerVal = playerStats.Velocity.x * playerStats.SteerSpeed;
+    float forwardVal = playerStats.Velocity.z * playerStats.Speed;
+    Vector3 vel = new Vector3(steerVal, playerStats.Velocity.y, forwardVal);
+
+    playerStats.GetComponent<Rigidbody>().velocity = vel * Time.deltaTime;
   }
 
 }
