@@ -42,4 +42,10 @@ public class PlayerStats : MonoBehaviour
     get;
     set;
   }
+
+  public float LastRecordedCrouchValue
+  {
+    get;
+    set;
+  }
 }

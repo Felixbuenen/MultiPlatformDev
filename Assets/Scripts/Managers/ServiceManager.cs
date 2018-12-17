@@ -26,7 +26,8 @@ public class ServiceManager : IServiceManager
 
     // platform dependent input
 #if UNITY_EDITOR || UNITY_STANDALONE
-    serviceDict.Add(typeof(IInputSystem), new PS4InputSystem()); // make this platform independent
+    //serviceDict.Add(typeof(IInputSystem), new PS4InputSystem());
+    serviceDict.Add(typeof(IInputSystem), new DebugInputSystem());
 #elif UNITY_ANDROID
     serviceDict.Add(typeof(IInputSystem), new MobileInputSystem());
 

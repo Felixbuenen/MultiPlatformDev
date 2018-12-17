@@ -30,8 +30,6 @@ public class PlayerStateManager : MonoBehaviour
     // set initial state
     currentState = states[PlayerRidingState.ID];
     currentState.Start();
-
-
   }
 
   public void FixedUpdate()

@@ -123,7 +123,7 @@ public class TrickQueue
     string buffer = "";
     foreach (int i in queue) buffer += i;
 
-    Debug.Log("Buffer: " + buffer);
+    //Debug.Log("Buffer: " + buffer);
   }
 
   // check if input in last 3 frames

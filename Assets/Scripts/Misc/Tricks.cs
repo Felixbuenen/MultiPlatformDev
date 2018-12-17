@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class Trick
@@ -30,7 +31,10 @@ public abstract class Trick
 
 public class Ollie : Trick
 {
-  private float jumpSpeed;
+  private float maxJumpForce = 6f;
+  private float jumpSpeed = 0f;
+  private int maxPossibleJumpTime = 10; // num of frames player takes to go from crouch to jump
+
   public override bool Available { get; set; }
 
   public override string Pattern
@@ -45,12 +49,22 @@ public class Ollie : Trick
   public override void Evaluate(string recordedTrick)
   {
     // set ollie parameters
-    Debug.Log("Ollie evaluated...");
+    // evaluate jump speed
+    int numZeros = recordedTrick.Count(x => x == '0');
+    jumpSpeed = 1 - (float)numZeros / (float)maxPossibleJumpTime; // DOESNT WORK
+
+    Debug.Log("Num zeros: " + numZeros);
+    Debug.Log("Recorded jump: " + recordedTrick);
+    Debug.Log("Jump speed: " + jumpSpeed);
   }
 
   public override void DoExecute(GameObject player)
   {
-    player.GetComponent<Rigidbody>().AddForce(new Vector3(0, 5, 0), ForceMode.Impulse);
+    // too much multiplication, maybe minJumpValue + crouchValue * maxCrouchForce + jumpSpeed * maxJumpSpeed
+    //  crouch is going wrong (gives 0)
+    float jumpStrength = player.GetComponent<PlayerStats>().LastRecordedCrouchValue + jumpSpeed + maxJumpForce;
+
+    player.GetComponent<Rigidbody>().AddForce(new Vector3(0, jumpStrength, 0), ForceMode.Impulse);
     player.GetComponent<PlayerStateManager>().SwitchState(PlayerAirState.ID);
     TrickExecuter.StartCoroutine(Execute(player));
   }

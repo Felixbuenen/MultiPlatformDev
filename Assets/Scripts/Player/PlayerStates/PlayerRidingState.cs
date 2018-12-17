@@ -46,15 +46,10 @@ public class PlayerRidingState : PlayerState
       Trick latestTrick = tricks[tricks.Count - 1];
 
       tricks.RemoveAt(tricks.Count - 1);
-
-      latestTrick.Evaluate("");
-      Debug.Log(latestTrick);
       latestTrick.DoExecute(stateManager.gameObject);
     }
 
     playerStats.Velocity = new Vector3(playerController.GetMovement().x, playerStats.Velocity.y, 1);
-
-
     //Debug.Log("Number of tricks in queue: " + playerController.GetTricks().Count);
     // check left - right movement
     // check ground trick input

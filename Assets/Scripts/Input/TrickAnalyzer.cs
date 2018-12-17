@@ -58,6 +58,7 @@ public class TrickAnalyzer
         if (trick.Available)
         {
           Debug.Log("Adding " + trick + " to buffer...");
+          trick.Evaluate(recordedTrick);
           trickBuffer.Add(trick);
           break;
         }

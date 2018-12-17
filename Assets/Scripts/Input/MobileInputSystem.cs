@@ -6,14 +6,24 @@ using UnityEngine;
 
 public class MobileInputSystem : IInputSystem
 {
-  //Queue<int> parsedInput;
   TrickQueue trickQueue;
   float steerSensitivity = 1.5f;
 
+  // vars for input radius
+  Vector2 inputCentre;
+  float inputRadius; // in pixels
+
+  bool playerTouchingScreen
+  {
+    get { return Input.GetMouseButton(0); }
+  }
+  bool playerTouchedScreen
+  {
+    get { return Input.GetMouseButtonDown(0); }
+  }
 
   public TrickQueue GetSerializedTrickInput()
   {
-    //return parsedInput;
     return trickQueue;
   }
 
@@ -22,32 +32,25 @@ public class MobileInputSystem : IInputSystem
   {
     //parsedInput = new Queue<int>();
     //for (int i = 0; i < 90; i++) parsedInput.Enqueue(0); // fill queue with 0
+    inputCentre = Vector2.zero;
+    inputRadius = 75f;
 
     trickQueue = new TrickQueue(90);
   }
 
   public void Update()
   {
-    // DEBUG
-    /*if (Input.touchCount > 0)
-    {
-      parsedInput.Enqueue(3);
-      parsedInput.Dequeue();
-    }
-    else
-    {
-      parsedInput.Enqueue(0);
-      parsedInput.Dequeue();
-    }*/
+    int newInputValue = 0;
 
-    if (Input.touchCount > 0)
+    // checks if player just touched the screen
+    if (playerTouchedScreen)
     {
-      trickQueue.EnqueueDequeue(3);
+      inputCentre = Input.mousePosition;
     }
-    else
-    {
-      trickQueue.EnqueueDequeue(0);
-    }
+
+    newInputValue = ParseTrickInput(AnalogTrickInput());
+
+    trickQueue.EnqueueDequeue(newInputValue);
   }
 
   Vector2 movement = new Vector2();
@@ -60,10 +63,33 @@ public class MobileInputSystem : IInputSystem
     return movement * steerSensitivity;
   }
 
+  Vector2 trickInputPosition = new Vector2();
   public Vector2 AnalogTrickInput()
   {
-    Debug.Log("MOBILE NOT IMPLEMENTED");
-    return Vector2.zero;
+    if (!playerTouchingScreen) return Vector2.zero;
+
+    trickInputPosition.x = (Input.mousePosition.x - inputCentre.x) / inputRadius;
+    trickInputPosition.y = (Input.mousePosition.y - inputCentre.y) / inputRadius;
+
+    //Debug.Log("<b>Trick position: </b>" + trickInputPosition);
+
+    return trickInputPosition;
+  }
+
+  private int ParseTrickInput(Vector2 input)
+  {
+    if (input.magnitude < 0.8f) return 0;
+
+    float angle = Vector2.Angle(Vector2.up, input);
+    if (input.x < 0) angle = 360f - angle;
+
+    // map degree to 1-8 int
+    float direction = (float)Math.Round(angle / 45f, MidpointRounding.AwayFromZero) % 8;
+    direction += 1f;
+
+    Debug.Log("Direction: " + direction);
+
+    return (int)direction;
   }
 
 }
