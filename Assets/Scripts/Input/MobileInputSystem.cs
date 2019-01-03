@@ -56,7 +56,6 @@ public class MobileInputSystem : IInputSystem
   Vector2 movement = new Vector2();
   public Vector2 AnalogMoveInput()
   {
-    //Debug.Log("MOBILE NOT IMPLEMENTED");
     movement = Input.acceleration;
     movement.y = 0;
 
@@ -70,6 +69,18 @@ public class MobileInputSystem : IInputSystem
 
     trickInputPosition.x = (Input.mousePosition.x - inputCentre.x) / inputRadius;
     trickInputPosition.y = (Input.mousePosition.y - inputCentre.y) / inputRadius;
+
+    float inputVectorLength = trickInputPosition.magnitude;
+    float difference = (inputVectorLength * inputRadius) - inputRadius;
+    if (difference > 0)
+    {
+      //Debug.Log("CENTRE CHANGED");
+      Vector2 normalizedInputVector = (trickInputPosition / inputVectorLength);
+      Vector2 diffVector = normalizedInputVector * difference;
+
+      inputCentre += diffVector;
+      trickInputPosition = normalizedInputVector;
+    }
 
     //Debug.Log("<b>Trick position: </b>" + trickInputPosition);
 

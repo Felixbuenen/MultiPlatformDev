@@ -17,44 +17,25 @@ public class TrickAnalyzer
     trickPool = new Dictionary<System.Type, Trick>();
     trickPool.Add(typeof(Ollie), new Ollie());
     trickPool.Add(typeof(Kickflip), new Kickflip());
+    trickPool.Add(typeof(KickflipAir), new KickflipAir());
+    trickPool.Add(typeof(Heelflip), new Heelflip());
+    trickPool.Add(typeof(HeelFlipAir), new HeelFlipAir());
 
     trickBuffer = new List<Trick>();
   }
 
   public List<Trick> GetTricks(TrickQueue parsedInput)
   {
-    // maybe change this to a regex expression that takes a list of things it can match (trick patterns)
-    //  and hopefully it will return tricks in the right order
-    /*foreach (KeyValuePair<string, System.Type> trick in patternTrickMap)
-    {
-      // analyse inputbuffer
-
-      // check if trick available (?)
-
-      // add to buffer
-    }*/
-
-    // -------- DEBUG -----------
-    /*if (parsedInput.Contains(3))
-    {
-      if (trickPool[typeof(Kickflip)].Available)
-      {
-        Debug.Log("Adding a kickflip to the buffer...");
-        trickBuffer.Add(trickPool[typeof(Kickflip)]);
-        //Debug.Log(trickBuffer.Count);
-      }
-    }*/
-    // -------- END DEBUG -----------
-
     bool debugFoundTrick = false;
 
     foreach (Trick trick in trickPool.Values)
     {
       string recordedTrick = parsedInput.FindTrick(trick);
+      //parsedInput.DebugToConsole();
       if (recordedTrick != "")
       {
         debugFoundTrick = true;
-        Debug.Log(trick + " recorded. Pattern: " + recordedTrick);
+        //Debug.Log(trick + " recorded. Pattern: " + recordedTrick);
         if (trick.Available)
         {
           Debug.Log("Adding " + trick + " to buffer...");
@@ -64,13 +45,6 @@ public class TrickAnalyzer
         }
       }
     }
-
-    if (!debugFoundTrick)
-    {
-      Debug.Log("No trick found: ");
-      parsedInput.DebugToConsole();
-    }
-
 
     return trickBuffer;
   }

@@ -10,6 +10,8 @@ public class PlayerStateManager : MonoBehaviour
 
   private PlayerStats playerStats;
 
+  public PlayerState CurrentState { get { return currentState; } }
+
   private void Start()
   {
     // setup player state object

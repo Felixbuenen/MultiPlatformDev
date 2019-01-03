@@ -51,6 +51,8 @@ public class DebugInputSystem : IInputSystem
     newInputValue = ParseTrickInput(AnalogTrickInput());
 
     trickQueue.EnqueueDequeue(newInputValue);
+    //trickQueue.DebugToConsole();
+
   }
 
   Vector2 movement = new Vector2();
@@ -70,7 +72,19 @@ public class DebugInputSystem : IInputSystem
     trickInputPosition.x = (Input.mousePosition.x - inputCentre.x) / inputRadius;
     trickInputPosition.y = (Input.mousePosition.y - inputCentre.y) / inputRadius;
 
-    //Debug.Log("<b>Trick position: </b>" + trickInputPosition);
+    float inputVectorLength = trickInputPosition.magnitude;
+    float difference = (inputVectorLength * inputRadius) - inputRadius;
+    if (difference > 0)
+    {
+      //Debug.Log("CENTRE CHANGED");
+      Vector2 normalizedInputVector = (trickInputPosition / inputVectorLength);
+      Vector2 diffVector = normalizedInputVector * difference;
+
+      inputCentre += diffVector;
+      trickInputPosition = normalizedInputVector;
+    }
+
+    Debug.Log("<b>Trick position: </b>" + trickInputPosition);
 
     return trickInputPosition;
   }

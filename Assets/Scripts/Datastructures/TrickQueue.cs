@@ -39,17 +39,12 @@ public class TrickQueue
   {
     if (somethingHappened)
     {
-      // analyze if 'trick' happened
-      //if (Contains(int.Parse(trick.Pattern)))
-      //{
-      //  return trick.Pattern;
-      //}
-
       int patternIndex = trick.Pattern.Length - 1;
       char[] patternChars = trick.Pattern.ToCharArray();
 
       string recordedPattern = "";
 
+      // search max 4 elements deep in the recorded input as starting point
       for (int i = 1; i < 4; i++)
       {
         string currentDigit = patternChars[patternIndex].ToString(); // "51" --> "1"
@@ -93,6 +88,12 @@ public class TrickQueue
           // all chars found --> valid trick
           if (patternIndex == -1)
           {
+            // eleminate trick data
+            for (int j = 0; j < recordedPattern.Length; j++)
+            {
+              queue[length - i - j] = -1;
+            }
+
             return recordedPattern;
           }
 
@@ -123,7 +124,7 @@ public class TrickQueue
     string buffer = "";
     foreach (int i in queue) buffer += i;
 
-    //Debug.Log("Buffer: " + buffer);
+    Debug.Log("Buffer: " + buffer);
   }
 
   // check if input in last 3 frames

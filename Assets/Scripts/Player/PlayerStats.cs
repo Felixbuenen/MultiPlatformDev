@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-  Transform player;
-
   void Start()
   {
-    player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     Velocity = Vector3.zero;
-    Speed = 130.0f;
+    Speed = 250.0f;
     SteerSpeed = 230.0f;
   }
 
@@ -21,8 +18,8 @@ public class PlayerStats : MonoBehaviour
   }
   public Vector3 Position
   {
-    get { return player.position; }
-    set { player.position = value; }
+    get { return transform.position; }
+    set { transform.position = value; }
   }
 
   public float Speed

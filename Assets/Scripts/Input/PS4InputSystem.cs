@@ -27,12 +27,6 @@ public class PS4InputSystem : IInputSystem
 
     // update input buffer
     trickQueue.EnqueueDequeue(newInputValue);
-    //trickQueue.DebugToConsole();
-    // USED FOR DEBUGGING
-    /*string buffer = "";
-    foreach (int i in parsedInput) buffer += i;
-
-    Debug.Log("Buffer: " + buffer);*/
   }
 
   // returns raw trick-input
@@ -57,7 +51,7 @@ public class PS4InputSystem : IInputSystem
     // actions only valid if joystick reaches ±max distance
     if (input.magnitude < 0.8f) return 0;
 
-    float angle = Vector2.Angle(Vector2.down, input);
+    float angle = Vector2.Angle(Vector2.up, input);
     if (input.x < 0) angle = 360f - angle;
 
     // map degree to 1-8 int

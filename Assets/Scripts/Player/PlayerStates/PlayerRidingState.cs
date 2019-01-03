@@ -5,11 +5,13 @@ using UnityEngine;
 public class PlayerRidingState : PlayerState
 {
   public static int ID;
+  private Animator animator;
 
   public PlayerRidingState(int id) : base()
   {
     //ID = GetNewID();
     ID = id;
+    animator = playerStats.GetComponentInChildren<Animator>();
   }
 
   public override void Start()
@@ -20,21 +22,13 @@ public class PlayerRidingState : PlayerState
 
   public override void Stop()
   {
-    //Debug.Log("Player riding state stopped");
-    //playerStats.Velocity = Vector3.zero;
   }
 
-  // HandleInput(ref List<GameEvent> events);
-  // events is een buffer van de events die plaatsgevonden hebben (events worden gegenereerd) door een
-  //  class die kijkt naar bijv. de laatste kwart seconde input en daar een event aan koppelt. Events kunnen vervolgens
-  //  worden geconsumed (waarna ze uit de lijst verwijderd worden). Of misschien wil je dat als de player een kickflip doet
-  //  en hij zit nog 1 frame in de lucht, dat hij na die frame de event alsnog uitvoert. Een soort delay. 
-
-  // input hoeft niet uit input buffer verwijderd te worden. Zeg gewoon: genereer een jump (als die dat detecteert).
-  //  stop dit in een event buffer. Als die na 5 frames bijv. nog steeds niet uitgevoerd is, verwijder je 'm uit de buffer.
-  //  
   public override void HandleInput(PlayerController playerController)
   {
+    //Debug.Log(playerController.GetRawTrickControl().y);
+    animator.SetFloat("CrouchValue", playerController.GetRawTrickControl().y * -1f);
+
     if (playerController.GetRawTrickControl().y > 0.5f)
     {
       stateManager.SwitchState(PlayerCrouchState.ID);
@@ -44,9 +38,22 @@ public class PlayerRidingState : PlayerState
     if (tricks.Count != 0)
     {
       Trick latestTrick = tricks[tricks.Count - 1];
-
       tricks.RemoveAt(tricks.Count - 1);
-      latestTrick.DoExecute(stateManager.gameObject);
+
+      if (!latestTrick.IsAirTrick)
+      {
+        if (!playerStats.DoingTrick)
+        {
+          latestTrick.DoExecute(stateManager.gameObject);
+          ScoreManager.Instance.AddTrickToSequence(latestTrick);
+        }
+
+        // remove automatically added air tricks
+        foreach (Trick trick in tricks)
+        {
+          if (trick.IsAirTrick) tricks.Remove(trick);
+        }
+      }
     }
 
     playerStats.Velocity = new Vector3(playerController.GetMovement().x, playerStats.Velocity.y, 1);
