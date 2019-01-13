@@ -1,14 +1,28 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class FinishEvent : MonoBehaviour
 {
+  public static Action OnInput;
 
-  public Text finishText;
+  public GameObject finishPanel;
+  public ScoreManager scoreManager;
+  public PlayerStateManager playerControl;
+  public IInputSystem input;
 
-  void OnCollisionEnter(Collision c)
+  public Text totalScoreText;
+  public Text totalNumTricksText;
+
+  public float allowInputDelay;
+  private float timer = 0f;
+  private bool allowInput = false;
+
+  private MenuLoader menuLoader;
+
+  private void OnCollisionEnter(Collision c)
   {
     if (c.transform.tag == "Player")
     {
@@ -16,14 +30,56 @@ public class FinishEvent : MonoBehaviour
     }
   }
 
-  IEnumerator FinishRoutine()
+  private void Start()
+  {
+    ServiceManager.Singleton.RequestService<IInputSystem>(out input);
+    ServiceManager.Singleton.RequestService<MenuLoader>(out menuLoader);
+  }
+
+  private void Update()
+  {
+    if (allowInput)
+    {
+      if (input.UIInput.GetBackButton())
+      {
+        // go to menu
+        LoadMenu();
+      }
+      if (input.UIInput.GetPressButton())
+      {
+        // reload play scene
+        Retry();
+      }
+    }
+  }
+
+  public void LoadMenu()
+  {
+    OnInput();
+    SceneManager.LoadSceneAsync(menuLoader.MenuName);
+  }
+
+  public void Retry()
+  {
+    OnInput();
+    SceneManager.LoadSceneAsync("Scenes/Main");
+  }
+
+  private IEnumerator FinishRoutine()
   {
     // show text
-    finishText.enabled = true;
-    yield return new WaitForSeconds(3f);
-    finishText.enabled = false;
+    finishPanel.SetActive(true);
 
-    // load scene again
-    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    playerControl.enabled = false;
+    totalScoreText.text = scoreManager.TotalScore.ToString();
+    totalNumTricksText.text = scoreManager.TotalNumTricks.ToString();
+
+    for (float timer = allowInputDelay; timer >= 0; timer -= Time.deltaTime)
+    {
+      yield return null;
+    }
+
+    // allow input
+    allowInput = true;
   }
 }

@@ -7,6 +7,8 @@ public class PlayerRidingState : PlayerState
   public static int ID;
   private Animator animator;
 
+  private Vector3 previousPosition;
+
   public PlayerRidingState(int id) : base()
   {
     //ID = GetNewID();
@@ -18,11 +20,10 @@ public class PlayerRidingState : PlayerState
   {
     Debug.Log("Player riding state started.");
     playerStats.Velocity = Vector3.forward;
+    previousPosition = Vector3.zero;
   }
 
-  public override void Stop()
-  {
-  }
+  public override void Stop() { }
 
   public override void HandleInput(PlayerController playerController)
   {
@@ -76,5 +77,14 @@ public class PlayerRidingState : PlayerState
     Vector3 vel = new Vector3(steerVal, playerStats.Velocity.y, forwardVal);
 
     playerStats.GetComponent<Rigidbody>().velocity = vel * Time.deltaTime;
+
+    // player stuck
+    if ((previousPosition - playerStats.transform.position).magnitude < 0.002f)
+    {
+      stateManager.SwitchState(PlayerFallingState.ID);
+    }
+
+    previousPosition = playerStats.transform.position;
+
   }
 }

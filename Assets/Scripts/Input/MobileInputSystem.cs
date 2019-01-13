@@ -3,9 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class MobileInputSystem : IInputSystem
 {
+  // mobile UI does not read actual UI (input events handled with buttons)
+  public class UIMobileInput : IUIInput
+  {
+    public bool GetBackButton() { return false; }
+    public bool GetPressButton() { return false; }
+    public bool GetUpButton() { return false; }
+    public bool GetDownButton() { return false; }
+  }
+
+  public IUIInput UIInput { get { return ui; } }
+  private IUIInput ui;
+
   TrickQueue trickQueue;
   float steerSensitivity = 1.5f;
 
@@ -36,6 +47,7 @@ public class MobileInputSystem : IInputSystem
     inputRadius = 75f;
 
     trickQueue = new TrickQueue(90);
+    ui = new UIMobileInput();
   }
 
   public void Update()
@@ -95,12 +107,12 @@ public class MobileInputSystem : IInputSystem
     if (input.x < 0) angle = 360f - angle;
 
     // map degree to 1-8 int
-    float direction = (float)Math.Round(angle / 45f, MidpointRounding.AwayFromZero) % 8;
+    float direction = (float) Math.Round(angle / 45f, MidpointRounding.AwayFromZero) % 8;
     direction += 1f;
 
     Debug.Log("Direction: " + direction);
 
-    return (int)direction;
+    return (int) direction;
   }
 
 }

@@ -29,7 +29,7 @@ public class BirdSpawner : MonoBehaviour
     {
       if (!nextBirdDetermined)
       {
-        timer = Random.RandomRange(minTimeBetween, maxTimeBetween);
+        timer = Random.Range(minTimeBetween, maxTimeBetween);
       }
       else
       {

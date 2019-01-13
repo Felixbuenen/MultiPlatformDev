@@ -3,11 +3,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class DebugInputSystem : IInputSystem
 {
+  public class UIDebugInput : IUIInput
+  {
+    bool DPadPressed = false;
+
+    public bool GetBackButton() { return Input.GetButtonDown("PS4_O"); }
+    public bool GetPressButton() { return Input.GetButtonDown("PS4_X"); }
+    public bool GetUpButton()
+    {
+      float value = Input.GetAxisRaw("PS4_VERT_BTN");
+
+      if (DPadPressed && value == 0f)
+      {
+        DPadPressed = false;
+        return false;
+      }
+      else if (!DPadPressed && value > 0f)
+      {
+        DPadPressed = true;
+        return true;
+      }
+
+      return false;
+    }
+
+    public bool GetDownButton()
+    {
+      float value = Input.GetAxisRaw("PS4_VERT_BTN");
+
+      if (DPadPressed && value == 0f)
+      {
+        DPadPressed = false;
+        return false;
+      }
+      else if (!DPadPressed && value < 0f)
+      {
+        DPadPressed = true;
+        return true;
+      }
+
+      return false;
+    }
+  }
+
+  public IUIInput UIInput { get { return ui; } }
+  private IUIInput ui;
+
   TrickQueue trickQueue;
-  float steerSensitivity = 1.5f;
 
   // vars for input radius
   Vector2 inputCentre;
@@ -36,6 +80,7 @@ public class DebugInputSystem : IInputSystem
     inputRadius = 75f;
 
     trickQueue = new TrickQueue(90);
+    ui = new UIDebugInput();
   }
 
   public void Update()
@@ -49,19 +94,17 @@ public class DebugInputSystem : IInputSystem
     }
 
     newInputValue = ParseTrickInput(AnalogTrickInput());
-
     trickQueue.EnqueueDequeue(newInputValue);
-    //trickQueue.DebugToConsole();
-
   }
 
   Vector2 movement = new Vector2();
   public Vector2 AnalogMoveInput()
   {
-    float x = Input.GetAxis("PS4_LeftStickX");
-    float y = Input.GetAxis("PS4_LeftStickY");
+    movement.x = 0f;
+    if (Input.GetKey(KeyCode.A)) movement.x = -1.0f;
+    else if (Input.GetKey(KeyCode.D)) movement.x = 1.0f;
 
-    return new Vector2(x, y);
+    return movement;
   }
 
   Vector2 trickInputPosition = new Vector2();
@@ -97,12 +140,12 @@ public class DebugInputSystem : IInputSystem
     if (input.x < 0) angle = 360f - angle;
 
     // map degree to 1-8 int
-    float direction = (float)Math.Round(angle / 45f, MidpointRounding.AwayFromZero) % 8;
+    float direction = (float) Math.Round(angle / 45f, MidpointRounding.AwayFromZero) % 8;
     direction += 1f;
 
     Debug.Log("Direction: " + direction);
 
-    return (int)direction;
+    return (int) direction;
   }
 
 }

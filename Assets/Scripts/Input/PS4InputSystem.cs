@@ -5,6 +5,52 @@ using UnityEngine;
 
 public class PS4InputSystem : IInputSystem
 {
+  public class UIPS4Input : IUIInput
+  {
+    private bool DPadPressed = false;
+
+    public bool GetBackButton() { return Input.GetButtonDown("PS4_O"); }
+    public bool GetPressButton() { return Input.GetButtonDown("PS4_X"); }
+    public bool GetUpButton()
+    {
+      float value = Input.GetAxisRaw("PS4_VERT_BTN");
+
+      if (DPadPressed && value == 0f)
+      {
+        DPadPressed = false;
+        return false;
+      }
+      else if (!DPadPressed && value > 0f)
+      {
+        DPadPressed = true;
+        return true;
+      }
+
+      return false;
+    }
+
+    public bool GetDownButton()
+    {
+      float value = Input.GetAxisRaw("PS4_VERT_BTN");
+
+      if (DPadPressed && value == 0f)
+      {
+        DPadPressed = false;
+        return false;
+      }
+      else if (!DPadPressed && value < 0f)
+      {
+        DPadPressed = true;
+        return true;
+      }
+
+      return false;
+    }
+  }
+
+  public IUIInput UIInput { get { return ui; } }
+  private IUIInput ui;
+
   TrickQueue trickQueue;
   Transform player;
 
@@ -17,6 +63,7 @@ public class PS4InputSystem : IInputSystem
   public PS4InputSystem()
   {
     trickQueue = new TrickQueue(90);
+    ui = new UIPS4Input();
   }
 
   // Update is called once per frame
@@ -55,9 +102,9 @@ public class PS4InputSystem : IInputSystem
     if (input.x < 0) angle = 360f - angle;
 
     // map degree to 1-8 int
-    float direction = (float)Math.Round(angle / 45f, MidpointRounding.AwayFromZero) % 8;
+    float direction = (float) Math.Round(angle / 45f, MidpointRounding.AwayFromZero) % 8;
     direction += 1f;
 
-    return (int)direction;
+    return (int) direction;
   }
 }

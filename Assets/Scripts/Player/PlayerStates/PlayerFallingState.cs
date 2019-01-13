@@ -1,9 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerFallingState : PlayerState
 {
+  public static Action PlayerFell;
+  public static Action PlayerRidingAgain;
+
   private TrickExecuter monoBehaviour;
   public static int ID;
 
@@ -35,8 +39,18 @@ public class PlayerFallingState : PlayerState
 
   private IEnumerator DoFallSequence()
   {
-    Debug.Log("Player fell! :(");
-    yield return new WaitForSeconds(3f);
+    // call event
+    if (PlayerFell != null) PlayerFell();
+
+    yield return new WaitForSeconds(2f);
+    Vector3 currentPosition = playerStats.transform.position;
+    Vector3 checkpointPosition = CheckpointTrigger.currentCheckpoint.transform.position;
+
+    // 1.02 is an ugly magic number that sets the player to the 'grounded' position
+    playerStats.transform.position = new Vector3(currentPosition.x, 1.02f, checkpointPosition.z);
+
+    if (PlayerRidingAgain != null) PlayerRidingAgain();
+
     stateManager.SwitchState(PlayerRidingState.ID);
   }
 }

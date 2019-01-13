@@ -7,6 +7,9 @@ public class ScoreManager : MonoBehaviour
 {
   public static ScoreManager Instance;
 
+  public int TotalNumTricks { get; private set; }
+  public int TotalScore { get; private set; }
+
   // UI elements
   public GameObject scoreParentUI;
   public Text scoreMultiplierText;
@@ -20,7 +23,6 @@ public class ScoreManager : MonoBehaviour
   private string tricksInSequence;
 
   private bool activeSequence;
-  private bool isStopping; // true while StopSequence() coroutine is running
 
   private void Awake()
   {
@@ -34,9 +36,13 @@ public class ScoreManager : MonoBehaviour
     }
   }
 
-  private void Start()
+  // reset stats when play scene is reloaded
+  void OnSceneLoaded()
   {
     scoreParentUI.SetActive(false);
+
+    TotalNumTricks = 0;
+    TotalScore = 0;
   }
 
   private void StartScoreSequence(Trick trick)
@@ -46,6 +52,7 @@ public class ScoreManager : MonoBehaviour
     currentScore = 0;
     currentTrickNum = 0;
     tricksInSequence = "";
+    finalScoreText.text = "";
 
     scoreParentUI.SetActive(true);
 
@@ -69,7 +76,7 @@ public class ScoreManager : MonoBehaviour
     currentTrickNum++;
 
     // update trick sequence + score text
-    tricksInSequence += " " + trick.Name;
+    tricksInSequence += " + " + trick.Name;
     trickSequenceText.text = tricksInSequence + ": " + currentScore;
 
     // update score multiplier text
@@ -80,13 +87,13 @@ public class ScoreManager : MonoBehaviour
   {
     if (!activeSequence) return;
 
+    TotalNumTricks += currentTrickNum;
+    TotalScore += currentScore * currentTrickNum;
     StartCoroutine(StopScoreSequenceInternal());
   }
 
   private IEnumerator StopScoreSequenceInternal()
   {
-    isStopping = true;
-
     finalScoreText.gameObject.SetActive(true);
     finalScoreText.text = (currentScore * currentTrickNum).ToString();
 
@@ -104,7 +111,6 @@ public class ScoreManager : MonoBehaviour
 
     finalScoreText.gameObject.SetActive(false);
     scoreParentUI.SetActive(false);
-    isStopping = false;
   }
 
   public void PlayerFell()
