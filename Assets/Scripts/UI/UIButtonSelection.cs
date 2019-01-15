@@ -13,6 +13,7 @@ public class UIButtonSelection : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
+
 		buttonIndex = 0;
 		maxButtons = buttons.Length;
 		ServiceManager.Singleton.RequestService<IInputSystem>(out input);
