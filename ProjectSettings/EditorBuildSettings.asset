@@ -15,6 +15,12 @@ EditorBuildSettings:
     path: Assets/Scenes/MenuAndroid.unity
     guid: c4b7953a2f25c475ba490e7b3341ac9e
   - enabled: 1
+    path: Assets/Scenes/InfoAndroid.unity
+    guid: d5efe97f44eee4f2e8140d20b66c4f42
+  - enabled: 1
+    path: Assets/Scenes/InfoPC.unity
+    guid: e6f264d104c4742bbb952978fdeda42a
+  - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: 96d0aa5c312864788ab6bb3ccc4fab5a
   m_configObjects: {}

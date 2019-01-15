@@ -150,11 +150,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1495647751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c57e95838ae14b7880f5000980775d4, type: 3}
+  m_Script: {fileID: 11500000, guid: d11922365427148b18b8a502f319a94a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pcMenuName: MenuPC
-  androidMenuName: MenuAndroid
 --- !u!1 &1796169711
 GameObject:
   m_ObjectHideFlags: 0

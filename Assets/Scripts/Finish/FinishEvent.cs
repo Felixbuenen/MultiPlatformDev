@@ -20,7 +20,7 @@ public class FinishEvent : MonoBehaviour
   private float timer = 0f;
   private bool allowInput = false;
 
-  private MenuLoader menuLoader;
+  private SceneLoader sceneLoader;
 
   private void OnCollisionEnter(Collision c)
   {
@@ -33,7 +33,7 @@ public class FinishEvent : MonoBehaviour
   private void Start()
   {
     ServiceManager.Singleton.RequestService<IInputSystem>(out input);
-    ServiceManager.Singleton.RequestService<MenuLoader>(out menuLoader);
+    ServiceManager.Singleton.RequestService<SceneLoader>(out sceneLoader);
   }
 
   private void Update()
@@ -56,7 +56,7 @@ public class FinishEvent : MonoBehaviour
   public void LoadMenu()
   {
     OnInput();
-    SceneManager.LoadSceneAsync(menuLoader.MenuName);
+    SceneManager.LoadSceneAsync(sceneLoader.MenuName);
   }
 
   public void Retry()

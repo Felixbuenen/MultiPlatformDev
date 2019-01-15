@@ -22,21 +22,18 @@ public class ServiceManager : IServiceManager
 
   private static void InitializeCoreServices()
   {
-    // platform dependent input
+
 #if UNITY_EDITOR
     serviceDict.Add(typeof(IInputSystem), new DebugInputSystem());
+    serviceDict.Add(typeof(SceneLoader), new PCSceneLoader());
 #elif UNITY_STANDALONE
     serviceDict.Add(typeof(IInputSystem), new PS4InputSystem());
+    serviceDict.Add(typeof(SceneLoader), new PCSceneLoader());
 #elif UNITY_ANDROID
     serviceDict.Add(typeof(IInputSystem), new MobileInputSystem());
+    serviceDict.Add(typeof(SceneLoader), new AndroidSceneLoader());
 #endif
 
-  }
-
-  // allow objects to add themselves to list
-  public void AddService<T>(T service) where T : class
-  {
-    serviceDict.Add(typeof(T), service);
   }
 
   public bool RequestService<T>(out T service) where T : class

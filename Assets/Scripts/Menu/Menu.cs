@@ -4,10 +4,12 @@ using UnityEngine.SceneManagement;
 public class Menu : MonoBehaviour
 {
   string gameSceneName;
+  SceneLoader sceneLoader;
 
   private void Start()
   {
     gameSceneName = "Scenes/Main";
+    ServiceManager.Singleton.RequestService<SceneLoader>(out sceneLoader);
   }
 
   public void StartGame()
@@ -18,6 +20,11 @@ public class Menu : MonoBehaviour
   public void ExitGame()
   {
     Application.Quit();
+  }
+
+  public void LoadControlsMenu()
+  {
+    SceneManager.LoadSceneAsync(sceneLoader.ControlsName);
   }
 
 }

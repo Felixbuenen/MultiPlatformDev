@@ -487,6 +487,11 @@ Prefab:
       propertyPath: finalScoreText
       value: 
       objectReference: {fileID: 862915396}
+    - target: {fileID: 114463210889888476, guid: e61cda5850bc84aed828f570d463ac68,
+        type: 2}
+      propertyPath: stopSequenceDelaySecs
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e61cda5850bc84aed828f570d463ac68, type: 2}
   m_IsPrefabAsset: 0
